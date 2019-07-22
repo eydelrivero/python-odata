@@ -100,6 +100,10 @@ class Query(object):
         """
         options = dict()
 
+        _api_version = self.options.get('api-version')
+        if _api_version is not None:
+            options['api-version'] = _api_version
+
         _top = self.options.get('$top')
         if _top is not None:
             options['$top'] = _top
@@ -150,6 +154,7 @@ class Query(object):
         :return: Query instance
         """
         o = dict()
+        o['api-version'] = self.options.get('api-version', None)
         o['$top'] = self.options.get('$top', None)
         o['$skip'] = self.options.get('$skip', None)
         o['$select'] = self.options.get('$select', [])[:]
@@ -247,6 +252,18 @@ class Query(object):
     @staticmethod
     def grouped(value):
         return '({0})'.format(value)
+
+    def api_version(self, value):
+        """
+        Set ``name`` query parameter. Can be called multiple times. Multiple
+        :py:func:`filter` calls are concatenated with 'and'
+
+        :param value: Property comparison. For example, ``api-version == 2``
+        :return: Query instance
+        """
+        q = self._new_query()
+        q.options['api-version'] = value
+        return q
 
     # Actions ##################################################################
 
