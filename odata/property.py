@@ -194,6 +194,10 @@ class PropertyBase(object):
         value = self.escape_value(value)
         return u'endswith({0}, {1})'.format(self.name, value)
 
+    def searchin(self, value):
+        # value = self.escape_value(value)
+        return u"search.in({0}, '{1}')".format(self.name, ','.join([str(v) for v in value]))
+
 
 class IntegerProperty(PropertyBase):
     """
