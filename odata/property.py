@@ -198,6 +198,12 @@ class PropertyBase(object):
         # value = self.escape_value(value)
         return u"search.in({0}, '{1}')".format(self.name, ','.join([str(v) for v in value]))
 
+    def geointersects(self, value):
+        return u"geo.intersects({0}, geography'{1}')".format(self.name, value)
+
+    def geodistance(self, latitude, longitude, distance_in_km):
+        return u"geo.distance({0}, geography'POINT({1} {2})') le {3}".format(self.name, longitude, latitude, distance_in_km)
+
 
 class IntegerProperty(PropertyBase):
     """
