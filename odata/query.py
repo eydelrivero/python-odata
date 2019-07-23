@@ -42,6 +42,7 @@ Navigation properties can be loaded in the same request with
 API
 ---
 """
+import logging
 
 try:
     # noinspection PyUnresolvedReferences
@@ -62,14 +63,18 @@ class Query(object):
         self.entity = entitycls
         self.options = options or dict()
         self.connection = connection
+        self.logger = logging.getLogger(__name__)
 
     def __iter__(self):
         url = self._get_url()
         options = self._get_options()
+        query_count = 0
         while True:
             data = self.connection.execute_get(url, options)
+            query_count += 1
             if 'value' in data:
                 value = data.get('value', [])
+                self.logger.debug('query: %i (row count: %i)' % (query_count, len(value)))
                 for row in value:
                     yield self._create_model(row)
 
